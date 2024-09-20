@@ -19,7 +19,12 @@ void UMover::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	AActor* Owner = GetOwner();
+	FString Name = Owner->GetActorNameOrLabel();
+	FVector OwnerLocation = Owner->GetActorLocation();
+	FString OwnerLocationName = OwnerLocation.ToCompactString();
+
+	UE_LOG(LogTemp, Display, TEXT("Mover Owner: %s with Location: %s"), *Name, *OwnerLocationName);
 	
 }
 
@@ -28,6 +33,5 @@ void UMover::BeginPlay()
 void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	UE_LOG(LogTemp, Display, TEXT("Mover is ticking!"));
 }
 
