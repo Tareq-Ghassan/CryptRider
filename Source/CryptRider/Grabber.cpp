@@ -4,6 +4,7 @@
 #include "Grabber.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 
 // Sets default values for this component's properties
@@ -21,9 +22,14 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
+	UPhysicsHandleComponent* PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (PhysicsHandle != nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("name: %s"), *PhysicsHandle->GetName());
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("Null pointer Exception, please check if you hooked up Physics Handle Componant Grabber"));
 
-	// ...
-	
+	}
 }
 
 
@@ -31,7 +37,10 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+}
+
+void UGrabber::Grab()
+{
 	FVector Start = GetComponentLocation();
 	FVector End = Start + GetForwardVector() * MaxGrabDistance;
 	DrawDebugLine(GetWorld(), Start, End, FColor::Red);
@@ -48,7 +57,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	);
 
 	AActor* HitActor = HitResult.GetActor();
-	
+
 	if (HasHit) {
 		UE_LOG(LogTemp, Warning, TEXT("Actor hit: %s"), *HitActor->GetActorNameOrLabel());
 	}
@@ -56,6 +65,9 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		UE_LOG(LogTemp, Warning, TEXT("No Actor hit"));
 
 	}
+}
 
+void UGrabber::Release() {
+	UE_LOG(LogTemp, Display, TEXT("Releas grabber"));
 }
 
