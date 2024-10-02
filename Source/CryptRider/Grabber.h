@@ -2,9 +2,12 @@
 
 #pragma once
 
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
 #include "Grabber.generated.h"
+
+
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -31,10 +34,15 @@ public:
 	void Release();
 
 private:
+	UPhysicsHandleComponent* GetPhysiceHandle() const;
+
 	UPROPERTY(EditAnywhere)
 	float MaxGrabDistance = 400;
 
 	UPROPERTY(EditAnywhere)
 	float GraberRadius = 100;
+
+	UPROPERTY(EditAnywhere)
+	float HoldDistance = 200;
 
 };
