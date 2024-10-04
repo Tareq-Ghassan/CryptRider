@@ -36,6 +36,8 @@ public:
 private:
 	UPhysicsHandleComponent* GetPhysiceHandle() const;
 
+	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
+
 	UPROPERTY(EditAnywhere)
 	float MaxGrabDistance = 400;
 
