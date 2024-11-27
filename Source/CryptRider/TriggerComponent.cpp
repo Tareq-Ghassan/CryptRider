@@ -25,13 +25,42 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	TArray<AActor*> Actors;
+	AActor* Actor = GetAcceptableActor();
+	if (Actor != nullptr) {
+		UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Actor->GetRootComponent());
+		if (Component != nullptr) 
+		{
+			Component->SetSimulatePhysics(false);
+		}
+		Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+		Mover->SetShouldMove(true);
+	}
+	else {
+		Mover->SetShouldMove(false);
+	}
 
+}
+
+void UTriggerComponent::SetMover(UMover* NewMover)
+{
+	Mover = NewMover;
+
+}
+
+
+AActor* UTriggerComponent::GetAcceptableActor() const
+{
+	TArray<AActor*> Actors;
 	GetOverlappingActors(Actors);
 
 	for (AActor* Actor : Actors) {
-		FString ActorName = Actor->GetActorNameOrLabel();
-		UE_LOG(LogTemp, Display, TEXT("Overlapping: %s"), *ActorName);
-	}
+		bool HasAcceptableTag = Actor->ActorHasTag(AcceptableActorTag);
+		bool IsGrabed = Actor->ActorHasTag("Grabbed");
 
+		if (HasAcceptableTag && !IsGrabed) 
+		{
+			return Actor;
+		}
+	}
+	return nullptr;
 }
